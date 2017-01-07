@@ -10,6 +10,7 @@ Hao Ye
 -   [Using a dplyr workflow to process model output](#using-a-dplyr-workflow-to-process-model-output)
     -   [single dataset example](#single-dataset-example)
     -   [multiple dataset example](#multiple-dataset-example)
+    -   [multiple dataset example (conditional mutate)](#multiple-dataset-example-conditional-mutate)
 
 Preamble
 ========
@@ -40,6 +41,10 @@ library(purrr)
     ## 
     ##     contains, order_by
 
+``` r
+set.seed(42)
+```
+
 Simple Workflow
 ===============
 
@@ -50,17 +55,17 @@ sample_data <- data.frame(x = runif(10), y = runif(10))
 print(sample_data)
 ```
 
-    ##            x           y
-    ## 1  0.2304907 0.004440553
-    ## 2  0.6050268 0.548838630
-    ## 3  0.8476621 0.518779969
-    ## 4  0.4425188 0.579565065
-    ## 5  0.5288064 0.466710529
-    ## 6  0.9775090 0.955430104
-    ## 7  0.3394113 0.780254330
-    ## 8  0.6359704 0.780465576
-    ## 9  0.9064275 0.990811630
-    ## 10 0.7698236 0.871429706
+    ##            x         y
+    ## 1  0.9148060 0.4577418
+    ## 2  0.9370754 0.7191123
+    ## 3  0.2861395 0.9346722
+    ## 4  0.8304476 0.2554288
+    ## 5  0.6417455 0.4622928
+    ## 6  0.5190959 0.9400145
+    ## 7  0.7365883 0.9782264
+    ## 8  0.1346666 0.1174874
+    ## 9  0.6569923 0.4749971
+    ## 10 0.7050648 0.5603327
 
 ``` r
 # imagine F is some model that we're fitting that returns some complex object, 
@@ -74,17 +79,17 @@ sample_output <- F(sample_data)
 print(sample_output)
 ```
 
-    ##          y_obs     y_hat
-    ## 1  0.004440553 0.3209490
-    ## 2  0.548838630 0.6303909
-    ## 3  0.518779969 0.8308562
-    ## 4  0.579565065 0.4961267
-    ## 5  0.466710529 0.5674175
-    ## 6  0.955430104 0.9381358
-    ## 7  0.780254330 0.4109393
-    ## 8  0.780465576 0.6559565
-    ## 9  0.990811630 0.8794082
-    ## 10 0.871429706 0.7665461
+    ##        y_obs     y_hat
+    ## 1  0.4577418 0.6111525
+    ## 2  0.7191123 0.6128411
+    ## 3  0.9346722 0.5634810
+    ## 4  0.2554288 0.6047556
+    ## 5  0.4622928 0.5904464
+    ## 6  0.9400145 0.5811459
+    ## 7  0.9782264 0.5976383
+    ## 8  0.1174874 0.5519948
+    ## 9  0.4749971 0.5916026
+    ## 10 0.5603327 0.5952479
 
 ``` r
 # imagine we want to process the output by computing the residual
@@ -97,17 +102,17 @@ sample_summary <- G(sample_output)
 print(sample_summary)
 ```
 
-    ##          y_obs     y_hat       resid
-    ## 1  0.004440553 0.3209490 -0.31650849
-    ## 2  0.548838630 0.6303909 -0.08155224
-    ## 3  0.518779969 0.8308562 -0.31207626
-    ## 4  0.579565065 0.4961267  0.08343838
-    ## 5  0.466710529 0.5674175 -0.10070698
-    ## 6  0.955430104 0.9381358  0.01729432
-    ## 7  0.780254330 0.4109393  0.36931507
-    ## 8  0.780465576 0.6559565  0.12450911
-    ## 9  0.990811630 0.8794082  0.11140344
-    ## 10 0.871429706 0.7665461  0.10488365
+    ##        y_obs     y_hat       resid
+    ## 1  0.4577418 0.6111525 -0.15341068
+    ## 2  0.7191123 0.6128411  0.10627112
+    ## 3  0.9346722 0.5634810  0.37119128
+    ## 4  0.2554288 0.6047556 -0.34932677
+    ## 5  0.4622928 0.5904464 -0.12815358
+    ## 6  0.9400145 0.5811459  0.35886858
+    ## 7  0.9782264 0.5976383  0.38058814
+    ## 8  0.1174874 0.5519948 -0.43450749
+    ## 9  0.4749971 0.5916026 -0.11660548
+    ## 10 0.5603327 0.5952479 -0.03491513
 
 Fancier Workflow
 ================
@@ -174,17 +179,17 @@ sample_summary_2 <- sample_output %>%
 print(sample_summary_2)
 ```
 
-    ##          y_obs     y_hat       resid
-    ## 1  0.004440553 0.3209490 -0.31650849
-    ## 2  0.548838630 0.6303909 -0.08155224
-    ## 3  0.518779969 0.8308562 -0.31207626
-    ## 4  0.579565065 0.4961267  0.08343838
-    ## 5  0.466710529 0.5674175 -0.10070698
-    ## 6  0.955430104 0.9381358  0.01729432
-    ## 7  0.780254330 0.4109393  0.36931507
-    ## 8  0.780465576 0.6559565  0.12450911
-    ## 9  0.990811630 0.8794082  0.11140344
-    ## 10 0.871429706 0.7665461  0.10488365
+    ##        y_obs     y_hat       resid
+    ## 1  0.4577418 0.6111525 -0.15341068
+    ## 2  0.7191123 0.6128411  0.10627112
+    ## 3  0.9346722 0.5634810  0.37119128
+    ## 4  0.2554288 0.6047556 -0.34932677
+    ## 5  0.4622928 0.5904464 -0.12815358
+    ## 6  0.9400145 0.5811459  0.35886858
+    ## 7  0.9782264 0.5976383  0.38058814
+    ## 8  0.1174874 0.5519948 -0.43450749
+    ## 9  0.4749971 0.5916026 -0.11660548
+    ## 10 0.5603327 0.5952479 -0.03491513
 
 multiple dataset example
 ------------------------
@@ -212,3 +217,56 @@ print(results_dplyr)
     ## # ... with 1 more variables: summary <list>
 
 Yes, it's silly here, becasue `G_dplyr` is no more complex than `G`, but if we have some complex workflow in `dplyr` that we need to map, this allows us to do that.
+
+multiple dataset example (conditional mutate)
+---------------------------------------------
+
+``` r
+library(dplyrExtras)
+```
+
+    ## Loading required package: data.table
+
+    ## Warning: package 'data.table' was built under R version 3.3.2
+
+    ## -------------------------------------------------------------------------
+
+    ## data.table + dplyr code now lives in dtplyr.
+    ## Please library(dtplyr)!
+
+    ## -------------------------------------------------------------------------
+
+    ## 
+    ## Attaching package: 'data.table'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     transpose
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     between, first, last
+
+    ## Loading required package: dtplyr
+
+    ## 
+    ## Attaching package: 'dplyrExtras'
+
+    ## The following object is masked from 'package:dplyr':
+    ## 
+    ##     mutate_if
+
+``` r
+results_dplyr_cond <- my_data %>% 
+    mutate(output = map(data, F)) %>%
+    mutate_rows(species > "A", output = map(output, G_dplyr))
+
+print(results_dplyr_cond)
+```
+
+    ## # A tibble: 3 × 3
+    ##   species                     data                   output
+    ##     <chr>                   <list>                   <list>
+    ## 1       A    <data.frame [10 × 2]>    <data.frame [10 × 2]>
+    ## 2       B   <data.frame [100 × 2]>   <data.frame [100 × 3]>
+    ## 3       C <data.frame [1,000 × 2]> <data.frame [1,000 × 3]>

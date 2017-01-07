@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load packages}
 library(dplyr)
 library(purrr)
+set.seed(42)
 ```
 
 # Simple Workflow
@@ -108,3 +109,14 @@ print(results_dplyr)
 
 Yes, it's silly here, becasue `G_dplyr` is no more complex than `G`, but if we have some complex workflow in `dplyr` that we need to map, this allows us to do that.
 
+## multiple dataset example (conditional mutate)
+
+```{r}
+library(dplyrExtras)
+
+results_dplyr_cond <- my_data %>% 
+    mutate(output = map(data, F)) %>%
+    mutate_rows(species > "A", output = map(output, G_dplyr))
+
+print(results_dplyr_cond)
+```
