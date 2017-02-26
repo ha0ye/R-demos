@@ -1,0 +1,69 @@
+---
+title: "s-map coefficients check"
+author: "Hao Ye"
+date: "`r format(Sys.Date(), '%Y %B %d')`"
+output: 
+  github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##
+
+First, create an S-map model using some sample data:
+
+```{r}
+library(rEDM)
+data("block_3sp")
+
+lib <- c(1, 100)
+pred <- c(101, 200)
+columns <- c("x_t-1", "x_t-2")
+
+smap_out <- block_lnlp(block_3sp, lib = lib, pred = pred, 
+                       method = "s-map", tp = 0, theta = 1, 
+                       columns = columns, target_column = "x_t", 
+                       stats_only = FALSE, save_smap_coefficients = TRUE, 
+                       short_output = TRUE)
+```
+
+##
+
+Next, pull out the s-map coefficients and input variables:
+
+```{r}
+predictions <- smap_out[[1]]$model_output$pred
+smap_coeffs <- smap_out[[1]]$smap_coefficients
+
+input_block <- block_3sp[pred[1]:pred[2], columns]
+```
+
+##
+
+Now, try and reproduce the predictions by multiplying the input block with the s-map coefficients. Note that because there is a constant term, we add a constant 1 to the right side of the input block (in prep. for the eventual matrix product).
+
+```{r}
+# each row of inputs to be multipled by corresponding s-map coefficints
+schur_product <- cbind(input_block, 1) * smap_coeffs
+
+# compute sum of rows
+calculated_preds <- rowSums(schur_product)
+```
+
+##
+
+The calculations have a names attribute that is not in the extracted predictions, so we clear it here for the equality test.
+
+```{r}
+names(calculated_preds) <- NULL
+
+# Test for equality
+message("predictions == calculated_preds?  ", 
+        all.equal(predictions, calculated_preds))
+```
+
+
+
+
