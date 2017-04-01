@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Make a plotly object from scratch:
 ```{r}
 library(plotly)
 set.seed(100)
@@ -16,3 +17,22 @@ d <- diamonds[sample(nrow(diamonds), 1000), ]
 plot_ly(d, x = ~carat, y = ~price, color = ~carat,
         size = ~carat, text = ~paste("Clarity: ", clarity))
 ```
+
+Make a ggplot object from scratch:
+```{r}
+library(ggplot2)
+library(viridis)
+my_plot <- ggplot(diamonds, 
+       aes(x = carat, y = price, color = color)) + 
+    scale_color_viridis(discrete = TRUE) + 
+    geom_point() + 
+    facet_grid(cut ~ clarity) + 
+    theme_bw()
+print(my_plot)
+```
+
+Send the ggplot object into plotly:
+```{r}
+ggplotly(my_plot)
+```
+
