@@ -1,0 +1,98 @@
+---
+title: "ordered_pair_indexing"
+author: "Hao Ye"
+date: "4/12/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+n <- 20 # number of points
+N <- n * (n-1)/2 # number of unique pairs
+```
+
+## Naive plot of all ordered pairs
+
+```{r}
+par(mar = c(4,4,1,1), pty = "s")
+plot(NA, xlim = c(0, n-1), ylim = c(0, n-1))
+abline(a = 0, b = 1, lty = 2)
+for(i in 2:n)
+    for(j in 1:(i-1))
+        points(i-1, j-1, pch = 1)
+```
+
+## Break up into subsets no larger than size k
+
+```{r}
+# how we map to the ordered pairs
+find_index_pair <- function(x)
+{
+    k <- floor((1 + sqrt(8*x))/2)
+    # if(k == floor(k))
+    #     return(c(k-1, 0))
+    # k <- floor(k)
+    return(c(k, x - (k * (k-1))/2 - 1))
+}
+
+# how many subsets
+k <- 10
+num_subsets <- ceiling(N/k)
+
+# setup plot
+par(mar = c(4,4,1,1), pty = "s")
+plot(NA, xlim = c(0, n-1), ylim = c(0, n-1))
+abline(a = 0, b = 1, lty = 2)
+
+# loop through and plot beginning and end of subsets
+upper_index <- 0
+for(subset_idx in 1:num_subsets)
+{
+    lower_index <- upper_index + 1
+    upper_index <- min(N, upper_index + k)
+    points(matrix(find_index_pair(lower_index), ncol = 2), pch = 2)
+    points(matrix(find_index_pair(upper_index), ncol = 2), pch = 6)
+}
+```
+
+## Same as before, but loop over subsets and color them
+```{r}
+library(viridis)
+# how many subsets
+k <- 10
+num_subsets <- ceiling(N/k)
+palette <- viridis(num_subsets)
+
+# setup plot
+par(mar = c(4,4,1,1), pty = "s")
+plot(NA, xlim = c(0, n-1), ylim = c(0, n-1))
+abline(a = 0, b = 1, lty = 2)
+
+# loop through and plot beginning and end of subsets
+upper_index <- 0
+for(subset_idx in 1:num_subsets)
+{
+    lower_index <- upper_index + 1
+    upper_index <- min(N, upper_index + k)
+    
+    lower_point <- find_index_pair(lower_index)
+    upper_point <- find_index_pair(upper_index)
+    
+    i <- lower_point[1]
+    j <- lower_point[2]
+    while(!(i >= upper_point[1] && j > upper_point[2]))
+    {
+        points(i, j, col = palette[subset_idx], pch = 19)
+        j <- j + 1
+        if(j == i)
+        {
+            i <- i + 1
+            j <- 0
+        }
+    }
+}
+```
+
