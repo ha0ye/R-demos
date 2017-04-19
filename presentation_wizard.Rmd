@@ -5,7 +5,7 @@ author: "Hao Ye"
 date: "`r format(Sys.Date(), '%Y %B %d')`"
 output:
   xaringan::moon_reader:
-    lib_dir: http://deepeco.ucsd.edu/~hye/libs
+    lib_dir: libs
     nature:
       highlightStyle: github
       highlightLines: true
