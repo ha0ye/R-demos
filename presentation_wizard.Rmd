@@ -1,0 +1,55 @@
+---
+title: "Presentation ~~Ninja~~ Wizard"
+subtitle: "⚔<br/>with `xaringan` and `plotly`"
+author: "Hao Ye"
+date: "`r format(Sys.Date(), '%Y %B %d')`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# Some Setup
+
+```{r}
+library(ggplot2)
+library(plotly)
+```
+
+---
+# Everyone's favorite dataset
+
+```{r, fig.height = 4, fig.width = 7}
+ggplotly(ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) + 
+             geom_point() + theme_bw())
+```
+
+---
+# Modifying the plot in real-time
+
+1. Exit full-screen mode from browser
+2. Edit .Rmd
+3. Re-knit (or be using `Infinite Moon Reader` add-in)
+4. Refresh browser
+
+---
+# Everyone's favorite dataset
+
+```{r, fig.height = 4, fig.width = 7}
+ggplotly(ggplot(iris, aes(x = Petal.Length, y = Sepal.Width, color = Species)) + 
+             geom_point() + theme_bw())
+```
+
+---
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
