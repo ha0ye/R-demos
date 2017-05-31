@@ -40,7 +40,7 @@ ggplotly(ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 4. Refresh browser
 
 ---
-# Everyone's favorite dataset
+# Everyone's favorite dataset (part II)
 
 ```{r, fig.height = 4, fig.width = 7}
 ggplotly(ggplot(iris, aes(x = Petal.Length, y = Sepal.Width, color = Species)) + 
@@ -51,5 +51,7 @@ ggplotly(ggplot(iris, aes(x = Petal.Length, y = Sepal.Width, color = Species)) +
 class: center, middle
 
 # Thanks!
+
+[Rmarkdown source](https://github.com/ha0ye/R-demos/blob/master/presentation_wizard.Rmd)
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
