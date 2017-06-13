@@ -1,3 +1,11 @@
+---
+title: "property matrix"
+author: "Hao Ye"
+date: "`r format(Sys.Date(), '%Y %B %d')`"
+output: 
+  github_document
+---
+```{r}
 # colors
 gray_color <- rgb(0.7, 0.7, 0.7, 0.5)
 blue_color <- rgb(0.3, 0.8, 1.0)
@@ -46,12 +54,12 @@ for(i in 1:n)
     rect((i-1)/n, prev_y, i/n, prev_y + y_sizes[i], 
          col = gray_color, border = NA)
     prev_y <- prev_y + y_sizes[i]
-    text(i/n - 1/(2*n), 1/2, labels[i])
+    text(i/n - 1/(2*n), 1/2, y_labels[i])
 }
 
 # data table
-plot(NA, type = "n", xlim = c(0, NCOL(data_matrix)), ylim = c(NROW(data_matrix), 0), axes = F, 
-     xlab = "", ylab = "")
+plot(NA, type = "n", xlim = c(0, NCOL(data_matrix)), ylim = c(NROW(data_matrix), 0), 
+     axes = F, xlab = "", ylab = "")
 for(i in 1:NROW(data_matrix))
 {
     for(j in 1:NCOL(data_matrix))
@@ -63,6 +71,6 @@ for(i in 1:NROW(data_matrix))
     }
 }
 
-
 # top outer label
 mtext("classification", side = 3, outer = TRUE)
+```

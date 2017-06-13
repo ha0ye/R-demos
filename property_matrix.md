@@ -1,0 +1,76 @@
+property matrix
+================
+Hao Ye
+2017 June 13
+
+``` r
+# colors
+gray_color <- rgb(0.7, 0.7, 0.7, 0.5)
+blue_color <- rgb(0.3, 0.8, 1.0)
+
+# data
+x_sizes <- c(14, 15, 17)
+x_labels <- c("High", "Low", "Medium")
+y_sizes <- c(12, 8, 6, 20)
+y_labels <- c("Cathemeral", "Crepuscular", "Diurnal", "Nocturnal")
+data_matrix <- matrix(c(2, 5, 1, 6, 
+                        4, 1, 2, 8, 
+                        6, 2, 3, 6), nrow = 3, byrow = TRUE)
+max_value <- max(data_matrix)
+
+# setup plot
+layout(matrix(1:4, nrow = 2), widths = c(1, 2), heights = c(1, 2))
+par(mar = c(1, 1, 1, 1), oma = c(0, 0, 2, 0))
+
+# empty corner plot
+plot(NA, type = "n", xlim = c(0, 1), ylim = c(0, 1), axes = F, 
+     xlab = "", ylab = "")
+
+# left-side table
+plot(NA, type = "n", xlim = c(0, 1), ylim = c(0, 1), axes = F, 
+     xlab = "", ylab = "")
+x_sizes <- x_sizes / sum(x_sizes)
+n <- length(x_sizes)
+prev_x <- 0
+for(i in 1:n)
+{
+    rect(prev_x, 1-(i-1)/n, prev_x + x_sizes[i], 1-i/n, 
+         col = gray_color, border = NA)
+    prev_x <- prev_x + x_sizes[i]
+
+    text(1/2, 1 - i/n + 1/(2*n), x_labels[i], adj = c(0.5, 0.5))
+}
+
+# top-side table
+plot(NA, type = "n", xlim = c(0, 1), ylim = c(0, 1), axes = F, 
+     xlab = "", ylab = "")
+y_sizes <- y_sizes / sum(y_sizes)
+n <- length(y_sizes)
+prev_y <- 0
+for(i in 1:n)
+{
+    rect((i-1)/n, prev_y, i/n, prev_y + y_sizes[i], 
+         col = gray_color, border = NA)
+    prev_y <- prev_y + y_sizes[i]
+    text(i/n - 1/(2*n), 1/2, y_labels[i])
+}
+
+# data table
+plot(NA, type = "n", xlim = c(0, NCOL(data_matrix)), ylim = c(NROW(data_matrix), 0), 
+     axes = F, xlab = "", ylab = "")
+for(i in 1:NROW(data_matrix))
+{
+    for(j in 1:NCOL(data_matrix))
+    {
+        symbols(j - 0.5, i - 0.5, circles = 1, 
+                inches = sqrt(data_matrix[i, j]) / max_value, 
+                fg = NA, bg = blue_color, add = TRUE)
+        rect(j-1, i-1, j, i)
+    }
+}
+
+# top outer label
+mtext("classification", side = 3, outer = TRUE)
+```
+
+![](property_matrix_files/figure-markdown_github/unnamed-chunk-1-1.png)
