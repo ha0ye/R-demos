@@ -1,0 +1,47 @@
+---
+title: "Interactive Networks using Geomnet and Plotly"
+author: "Hao Ye"
+date: "`r format(Sys.Date(), '%Y %B %d')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# geomnet demo
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(geomnet)
+data(theme_elements)
+
+# data step
+TEnet <- fortify(as.edgedf(theme_elements$edges[,c("parent", "child")]), theme_elements$vertices)
+
+# create a degree variable for use later
+TEnet <- TEnet %>%
+    group_by(from_id) %>%
+    mutate(degree = sqrt(10 * n() + 1))
+
+# plot
+my_plot <- ggplot(data = TEnet,
+       aes(from_id = from_id, to_id = to_id)) +
+    geom_net(layout.alg = "fruchtermanreingold",
+             aes(fontsize = degree), directed = TRUE,
+             labelon = TRUE, size = 1, labelcolour = 'black',
+             ecolour = "grey70", arrowsize = 0.5,
+             linewidth = 0.5, repel = TRUE) +
+    theme_net() +
+    xlim(c(-0.05, 1.05))
+print(my_plot)
+```
+
+# Now try it in plotly for interactivity
+
+```{r}
+library(plotly)
+ggplotly(my_plot)
+```
+
