@@ -1,0 +1,28 @@
+---
+title: "collinearity-correlation demo"
+author: "Hao Ye"
+date: "`r format(Sys.Date(), '%Y %B %d')`"
+output: 
+  github_document
+---
+
+```{r}
+set.seed(42)
+p <- rnorm(100)
+x <- matrix(rnorm(500), ncol = 5)
+for(i in 1:5)
+{
+    idx <- 1:20 + (i*20 - 20)
+    x[idx, i] <- p[idx]
+    x[idx, (i %% 5) + 1] <- p[idx] - rowSums(x[idx,-((i %% 5) + 1)])
+}
+```
+
+```{r}
+all.equal(p, rowSums(x)) # test that p = x_1+x_2+x_3+x_4+x_5
+```
+
+```{r}
+cor(x) # correlation matrix
+```
+
