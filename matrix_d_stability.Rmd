@@ -3,7 +3,7 @@ title: "D-stability of interaction matrices"
 author: "Hao Ye"
 date: "`r format(Sys.Date(), '%Y %B %d')`"
 output: 
-  github_document
+  html_document
 ---
 
 ## Definitions
