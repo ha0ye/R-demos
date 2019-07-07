@@ -1,1 +1,1 @@
-beepr::beep(11)
+beepr::beep(8)
