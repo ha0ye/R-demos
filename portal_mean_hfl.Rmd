@@ -1,0 +1,23 @@
+---
+title: "rodent_hfl"
+author: "Hao Ye"
+date: "9/10/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(portalr)
+library(dplyr)
+
+download_observations()
+dat <- summarise_individual_rodents()
+
+dat %>%
+  group_by(species) %>%
+  summarize(mean_hfl = mean(hfl, na.rm = TRUE)) %>%
+  knitr::kable()
+```
