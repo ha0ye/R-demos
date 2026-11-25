@@ -6,6 +6,7 @@ date: "`r format(Sys.Date(), '%Y %B %d')`"
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    chakra: libs/remark-0.15.0.min.js
     nature:
       highlightStyle: github
       highlightLines: true

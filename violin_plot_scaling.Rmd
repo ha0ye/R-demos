@@ -3,7 +3,7 @@ title: "violin plot demo"
 author: "Hao Ye"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
+  github_document:
     toc: false
     number_sections: false
 ---
